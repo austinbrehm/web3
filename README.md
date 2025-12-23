@@ -1,1 +1,2 @@
-# web3
+# Web3
+Explore web3!

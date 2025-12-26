@@ -9,13 +9,14 @@ Usage:
 
 Options:
     -h, --help      Show the help menu.
-    --ens           Show Ethereum address for a specific domain name.
+    --ens           Show data for a specific Ethereum Name Service (ENS) name.
 """
 
 import argparse
 import subprocess
 
 import web3
+import colorama
 
 
 def get_infura_key() -> str:
@@ -33,10 +34,13 @@ def get_infura_key() -> str:
 
 
 if __name__ == "__main__":
-    # Implement argument parser to retrieve coffee size from the terminal.
+    # Create argument parser.
     parser = argparse.ArgumentParser()
-    parser.add_argument("--ens", help="Get address of ENS domain name")
+    parser.add_argument("--ens", help="Get address of ENS name")
     args = parser.parse_args()
+
+    # Initalize color for CLI.
+    colorama.init(autoreset=True)
 
     # Get Infura API key.
     api_key = get_infura_key()
@@ -47,14 +51,58 @@ if __name__ == "__main__":
     )
 
     if provider.is_connected():
-        # Get most recent block number.
-        print(f"Latest Proposed Block Number: {provider.eth.get_block_number()}")
+        print(colorama.Fore.GREEN + "\nEthereum Blockchain Data 📊\n")
 
-        # Get current gas price, in gwei.
-        print(f"Current Gas Price: {round(provider.eth.gas_price * 10E-10, 3)} gwei")
+        # Get most recent block number.
+        print(
+            colorama.Fore.BLUE
+            + "🧊 Latest Proposed Block Number: "
+            + colorama.Style.RESET_ALL
+            + f"{provider.eth.get_block_number()}"
+        )
+
+        # Get current gas price.
+        print(
+            colorama.Fore.RED
+            + "⛽️ Current Gas Price: "
+            + colorama.Style.RESET_ALL
+            + f"{round(provider.eth.gas_price * 10E-10, 3)} gwei"
+        )
 
         if args.ens:
-            # Get address for ENS address.
-            print(f"Address for {args.ens}: {provider.ens.address(args.ens)}")
+            # Get account information for ENS name.
+            print(
+                colorama.Fore.LIGHTYELLOW_EX + "\nEthereum Name Service (ENS) Data 🪪"
+            )
+            address = provider.ens.address(args.ens)
+            balance = round(provider.eth.get_balance(address) * 10e-19, 5)  # in ETH
+            txs = provider.eth.get_transaction_count(address)
+            print(
+                colorama.Fore.CYAN
+                + "\n🆔 ENS Name: "
+                + colorama.Style.RESET_ALL
+                + f"{args.ens}"
+            )
+            print(
+                colorama.Fore.LIGHTMAGENTA_EX
+                + "🏠 Ethereum Address: "
+                + colorama.Style.RESET_ALL
+                + f"{address}"
+            )
+            print(
+                colorama.Fore.GREEN
+                + "💸 ETH Balance: "
+                + colorama.Style.RESET_ALL
+                + f"{balance} eth"
+            )
+            print(
+                colorama.Fore.LIGHTYELLOW_EX
+                + "✉️ Total Transactions: "
+                + colorama.Style.RESET_ALL
+                + f"{txs}\n"
+            )
     else:
-        print("Unable to connect to Infura. Make sure API key is up to date.")
+        print(
+            colorama.Fore.RED
+            + "❌ Unable to connect to Infura. Make sure API key is up to date."
+        )

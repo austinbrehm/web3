@@ -1,5 +1,5 @@
 # eth-connect
-Retrieve data from the Ethereum blockchain. 
+Connect to Infura, get Ethereum blockchain data, and display the results. 
 
 ## Setup
 ### Infura
@@ -7,10 +7,13 @@ Retrieve data from the Ethereum blockchain.
 2. Within the MetaMask Developer Portal, create an API key
 
 ### Git Bash
-1. From the home directory, open .bashrc file
-2. Type the following, replacing "abc123" with API key from Infura: 
+1. Open Git Bash, then run the following command: 
 `
-export INFURA_KEY="abc123"
+code ~/.bashrc
+`
+2. In the bashrc file, type the following: 
+`
+export INFURA_KEY="<API key from Infura>"
 ` 
 
 ## Usage

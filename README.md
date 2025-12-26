@@ -1,5 +1,9 @@
 # eth-connect
-Connect to Infura, get Ethereum blockchain data, and display the results. 
+Connect to Infura, get Ethereum blockchain data, and display the results.
+
+![Output](image.png)
+
+Built with Python and the web3.py library. 
 
 ## Setup
 ### Infura
@@ -26,5 +30,5 @@ OR
 
 Run the connect.py script with optional arguments:
 `
-python connect.py --ens <insert domain name>
+python connect.py --ens <insert ENS name>
 `

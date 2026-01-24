@@ -25,9 +25,12 @@ def get_infura_key() -> str:
     Returns:
         key: Infura API key, stored in .bashrc file.
     """
-    subprocess.run("source ~/.bashrc", shell=True, check=True)
     key = subprocess.run(
-        "echo $INFURA_KEY", shell=True, capture_output=True, text=True, check=True
+        "source ~/.bashrc && echo $INFURA_KEY",
+        shell=True,
+        capture_output=True,
+        text=True,
+        check=True,
     ).stdout.rstrip()
 
     return key
@@ -51,56 +54,26 @@ if __name__ == "__main__":
     )
 
     if provider.is_connected():
-        print(colorama.Fore.GREEN + "\nEthereum Blockchain Data 📊\n")
+        print(colorama.Fore.GREEN + "\nEthereum Blockchain Data 📊")
 
         # Get most recent block number.
-        print(
-            colorama.Fore.BLUE
-            + "🧊 Latest Proposed Block Number: "
-            + colorama.Style.RESET_ALL
-            + f"{provider.eth.get_block_number()}"
-        )
+        print(f"🧊 Latest Proposed Block Number: {provider.eth.get_block_number()}")
 
         # Get current gas price.
         print(
-            colorama.Fore.RED
-            + "⛽️ Current Gas Price: "
-            + colorama.Style.RESET_ALL
-            + f"{round(provider.eth.gas_price * 10E-10, 3)} gwei"
+            f"⛽️ Current Gas Price: {round(provider.eth.gas_price * 10E-10, 3)} gwei\n"
         )
 
         if args.ens:
             # Get account information for ENS name.
-            print(
-                colorama.Fore.LIGHTYELLOW_EX + "\nEthereum Name Service (ENS) Data 🪪"
-            )
+            print(colorama.Fore.BLUE + "Ethereum Name Service (ENS) Data 🪪")
             address = provider.ens.address(args.ens)
             balance = round(provider.eth.get_balance(address) * 10e-19, 5)  # in ETH
             txs = provider.eth.get_transaction_count(address)
-            print(
-                colorama.Fore.CYAN
-                + "\n🆔 ENS Name: "
-                + colorama.Style.RESET_ALL
-                + f"{args.ens}"
-            )
-            print(
-                colorama.Fore.LIGHTMAGENTA_EX
-                + "🏠 Ethereum Address: "
-                + colorama.Style.RESET_ALL
-                + f"{address}"
-            )
-            print(
-                colorama.Fore.GREEN
-                + "💸 ETH Balance: "
-                + colorama.Style.RESET_ALL
-                + f"{balance} eth"
-            )
-            print(
-                colorama.Fore.LIGHTYELLOW_EX
-                + "✉️ Total Transactions: "
-                + colorama.Style.RESET_ALL
-                + f"{txs}\n"
-            )
+            print(f"🆔 ENS Name: {args.ens}")
+            print(f"🏠 Ethereum Address: {address}")
+            print(f"💸 ETH Balance: {balance} eth")
+            print(f"✉️ Total Transactions: {txs}\n")
     else:
         print(
             colorama.Fore.RED
